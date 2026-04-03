@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BoostUp - Energy Drinks & Juices</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1, #f9ca24);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .header {
+            background: rgba(255,255,255,0.95);
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            max-width: 500px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.8rem 1.2rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: #4ecdc4;
+            box-shadow: 0 0 20px rgba(78, 205, 196, 0.3);
+        }
+
+        .search-btn {
+            padding: 0.8rem 2rem;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+
+        .search-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .categories {
+            display: flex;
+            gap: 1rem;
+            padding: 2rem;
+            overflow-x: auto;
+            background: rgba(255,255,255,0.9);
+            margin-bottom: 2rem;
+        }
+
+        .category-btn {
+            padding: 0.8rem 1.5rem;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            font-weight: 500;
+        }
+
+        .category-btn.active,
+        .category-btn:hover {
+            background: linear-gradient(45deg, #4ecdc4, #45b7d1);
+            color: white;
+            border-color: #4ecdc4;
+            transform: translateY(-2px);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .product-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ff6b6b;
+            margin-bottom: 1rem;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(45deg, #4ecdc4, #45b7d1);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .add-to-cart:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 20px rgba(78, 205, 196, 0.4);
+        }
+
+        .blinkit-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff6b6b;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .footer {
+            background: rgba(0,0,0,0.8);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                padding: 1rem;
+                gap: 1rem;
+            }
+            
+            .categories {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">🚀 BoostUp</div>
+        <div class="search-bar">
+            <input type="text" class="search-input" placeholder="Search Energy Drinks & Juices...">
+            <button class="search-btn">🔍 Search</button>
+        </div>
+    </header>
+
+    <div class="categories">
+        <button class="category-btn active">All Drinks</button>
+        <button class="category-btn">Energy Drinks</button>
+        <button class="category-btn">Juices</button>
+        <button class="category-btn">Sports Drinks</button>
+        <button class="category-btn">Vitamin Drinks</button>
+        <button class="category-btn">Electrolytes</button>
+    </div>
+
+    <div class="products-grid">
+        <!-- Energy Drinks -->
+        <div class="product-card">
+            <img src="https://images.unsplash.com/photo-1598831706044-824a629b2842?w=400&h=200&fit=crop" alt="Red Bull" class="product-image">
+            <div class="blinkit-badge">30 Min</div>
+            <div class="product-info">
+                <div class="product-name">Red Bull Energy Drink</div>
+                <div class="product-price">₹99</div>
+                <button class="add-to-cart">🛒 Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <img src="https://images.unsplash.com/photo-1609461592274-730ef6c8e946?w=400&h=200&fit=crop" alt="Monster" class="product-image">
+            <div class="blinkit-badge">30 Min</div>
+            <div class="product-info">
+                <div class="product-name">Monster Energy</div>
+                <div class="product-price">₹129</div>
+                <button class="add-to-cart">🛒 Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <img src="https://images.unsplash.com/photo-1577968897966-f97b209d2ece?w=400&h=200&fit=crop" alt="Gatorade" class="product-image">
+            <div class="blinkit-badge">25 Min</div>
+            <div class="product-info">
+                <div class="product-name">Gatorade Sports Drink</div>
+                <div class="product-price">₹85</div>
+                <button class="add-to-cart">🛒 Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <img src="https://images.unsplash.com/photo-1627308595383-5f37dc828e44?w=400&h=200&fit=crop" alt="Tropicana" class="product-image">
+            <div class="blinkit-badge">20 Min</div>
+            <div class="product-info">
+                <div class="product-name">Tropicana Orange Juice</div>
+                <div class="product-price">₹75</div>
+                <button class="add-to-cart">🛒 Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <img src="https://images.unsplash.com/photo-1542994983-9de74a8bb7f9?w=400&h=200&fit=crop" alt="Rockstar" class="product-image">
+            <div class="blinkit-badge">30 Min</div>
+            <div class="product-info">
+                <div class="product-name">Rockstar Energy Drink</div>
+                <div class="product-price">₹119</div>
+                <button class="add-to-cart">🛒 Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <img src="https://images.unsplash.com/photo-1570784332178-f1e6db5d9f93?w=400&h=200&fit=crop" alt="Real Juice" class="product-image">
+            <div class="blinkit-badge">15 Min</div>
+            <div class="product-info">
+                <div class="product-name">Real Fruit Juice Mixed</div>
+                <div class="product-price">₹45</div>
+                <button class="add-to-cart">🛒 Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=200&fit=crop" alt="Powerade" class="product-image">
+            <div class="blinkit-badge">25 Min</div>
+            <div class="product-info">
+                <div class="product-name">Powerade Mountain Blast</div>
+                <div class="product-price">₹89</div>
+                <button class="add-to-cart">🛒 Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&h=200&fit=crop" alt="Minute Maid" class="product-image">
+            <div class="blinkit-badge">20 Min</div>
+            <div class="product-info">
+                <div class="product-name">Minute Maid Pulpy Orange</div>
+                <div class="product-price">₹55</div>
+                <button class="add-to-cart">🛒 Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <img src="https://images.unsplash.com/photo-1615484478156-b3b8b1e67f17?w=400&h=200&fit=crop" alt="Bang Energy" class="product-image">
+            <div class="blinkit-badge">30 Min</div>
+            <div class="product-info">
+                <div class="product-name">Bang Energy Rainbow Unicorn</div>
+                <div class="product-price">₹149</div>
+                <button class="add-to-cart">🛒 Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?w=400&h=200&fit=crop" alt="Pappaya Juice" class="product-image">
+            <div class="blinkit-badge">15 Min</div>
+            <div class="product-info">
+                <div class="product-name">Pappaya Juice 1L</div>
+                <div class="product-price">₹95</div>
+                <button class="add-to-cart">🛒 Add to Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>🚀 BoostUp - Fastest Delivery of Energy Drinks & Juices | 10 Min Delivery Guarantee</p>
+        <p>&copy; 2024 BoostUp. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Category filter functionality
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        const products = document.querySelectorAll('.product-card');
+
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Simple filter (you can enhance this)
+                const filter = btn.textContent.toLowerCase();
+                products.forEach(product => {
+                    if (filter === 'all drinks' || product.querySelector('.product-name').textContent.toLowerCase().includes(filter)) {
+                        product.style.display = 'block';
+                    } else {
+                        product.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Add to cart animation
+        document.querySelectorAll('.add-to-cart').forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.textContent = '✅ Added!';
+                btn.style.background = '#28a745';
+                setTimeout(() => {
+                    btn.textContent = '🛒 Add to Cart';
+                    btn.style.background = '';
+                }, 1500);
+            });
+        });
+
+        // Search functionality
+        const searchInput = document.querySelector('.search-input');
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            products.forEach(product => {
+                const name = product.querySelector('.product-name').textContent.toLowerCase();
+                product.style.display = name.includes(query) ? 'block' : 'none';
+            });
+        });
+    </script>
+</body>
+</html>
